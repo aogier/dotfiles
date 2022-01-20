@@ -1,0 +1,90 @@
+general {
+    colors = true
+    interval = 1
+    output_format = i3bar
+    markup = 'pango'
+}
+
+order = 'reddit'
+order = 'github'
+order += 'cpufreq'
+order += 'diskdata'
+#order += 'diskdata_master'
+#order += "wifi"
+order += "cpu_temperature 0"
+order += "battery 0"
+order += "load"
+order += "time"
+order += "volume_status"
+order += "do_not_disturb"
+#order += "volume pcm"
+
+reddit {
+
+format = '\?if=!count=0 <span color="#FF5700" font_family="FontAwesome">\uf281 <span font_weight="heavy">{count}</span></span>|'
+
+    }
+
+github_oj {
+    markup = "pango"
+    cache_timeout = 60
+#    all = true
+}
+
+github {
+    auth_token = shell(cat ~/.secrets/github_notifications, str)
+    username = "aogier"
+    format = '\?if=!notifications_count=0 <span color="#FFFFFF" font_family="FontAwesome">\uf113 <span font_weight="heavy">{notifications_count}</span></span>|'
+    allow_urgent = false
+}
+
+cpufreq {
+    markup = "pango"
+}
+
+diskdata {
+    disks = "/home"
+    format = "<span font_family='FontAwesome' size='smaller' color='#aaffaa'>\uf015</span> {free}"
+    format_space = "[\?min_length=3 {value:.1f}]"
+}
+
+wifi {
+    #format = "<span font_family='FontAwesome'>\uf1eb</span> ({signal_percent} at {ssid}) {ip}|W: down"
+    format = "<span font_family='FontAwesome'>\uf1eb</span> ({signal_percent}) {ip}|W: down"
+    color_good = "#66FF66"
+}
+
+cpu_temperature 0 {
+    format = "<span font_family='FontAwesome' size='smaller' color='#aaffaa'>\uf2c9</span> %degrees"
+    format_above_threshold = "<span font_family='FontAwesome' size='smaller'>\uf2c7</span> %degrees"
+}
+
+battery 0 {
+    format = "<span font_family='FontAwesome' size='smaller' color='#aaffaa'>\uf242</span>%status %percentage %remaining"
+    status_unk = ""
+    status_bat = ""
+    format_percentage = "%.01f"
+}
+
+time {
+    format = "%Y%m%d %H:%M"
+}
+
+load {
+    format = "%1min/%5min/%15min"
+}
+
+#volume pcm {
+#     format = "<span font_family='FontAwesome'>\uf001</span>: %volume"
+#                   device = "default:1"
+#                   mixer = "Master"
+#                   #mixer = "PCM"
+#                   mixer_idx = 0
+#           }
+
+do_not_disturb {
+    format = '[\?color=state [\?if=state <span font_family="FontAwesome">\uf27a</span>|<span font_family="FontAwesome">\uf27a</span>]]'
+    thresholds = [(0, "good"), (1, "bad")]
+	color_good = "#aaffaa"
+	color_bad = "#ffaaaa"
+}

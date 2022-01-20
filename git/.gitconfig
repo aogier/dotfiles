@@ -1,0 +1,13 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Alessandro Ogier
+	email = alessandro.ogier@gmail.com
+	signingkey = 61F967DC8727FA5F
+[pull]
+	ff = only
+[core]
+	editor = sensible-editor
+[commit]
+	gpgSign = true
+[init]
+	defaultBranch = main
