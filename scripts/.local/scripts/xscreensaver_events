@@ -1,0 +1,15 @@
+#!/bin/sh
+
+xscreensaver-command --watch \
+    | while read -r line
+    do
+        if echo "$line" | grep -Eq '^(BLANK|LOCK)'
+        then
+            paused=true
+        elif echo "$line" | grep -Eq ^UNBLANK
+        then
+            paused=false
+        fi
+
+        dunstctl set-paused "$paused" && killall -SIGUSR1 i3status
+    done

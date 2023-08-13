@@ -7,7 +7,7 @@ xset -b
 xrdb -merge ~/.Xdefaults
 
 xscreensaver -nosplash&
-/home/oggei/.local/bin/xscreensaver_events&
+/home/oggei/.local/scripts/xscreensaver_events&
 
 /usr/libexec/geoclue-2.0/demos/agent&
 redshift-gtk -l geoclue2 &
