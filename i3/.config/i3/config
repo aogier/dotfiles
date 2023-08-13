@@ -18,14 +18,13 @@ font pango:Telegrama Render OsN 8
 floating_modifier $mod
 
 # start a terminal
-#bindsym $mod+Return exec xterm -si -sk
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec --no-startup-id alacritty
 
 # kill focused window
 bindsym $mod+Shift+Q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+p exec dmenu_run
+bindsym $mod+p exec --no-startup-id dmenu_run
 
 # change focus
 bindsym $alt+j focus left
@@ -106,23 +105,23 @@ bindsym $mod+Shift+C reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+R restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+E exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+E exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-bindsym Control+grave exec tdrop -ma -w -4 -y 30% alacritty
-bindsym Control+Escape exec tdrop -ma -w -4 -y 30% leapp-gui
+bindsym Control+grave exec --no-startup-id tdrop -ma -w -4 -y 30% alacritty
+bindsym Control+Escape exec --no-startup-id tdrop -ma -w -4 -y 30% leapp-gui
 
 set $refresh_i3status killall -SIGUSR1 py3status
 
 #increase sound volume
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
-bindsym Control+XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +1% && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym Control+XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +1% && $refresh_i3status
 #decrease sound volume
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
-bindsym Control+XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -1% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+bindsym Control+XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -1% && $refresh_i3status
 # mute sound
-bindsym XF86AudioMute exec pactl set-sink-mute $(pactl -f json list sinks | jq '.[] | select(.description|test("^Renoir.*")) .index') toggle && dunstify -r 10003 -t 800 "monitor muted" "\nBRUBRU" && $refresh_i3status
-bindsym XF86AudioPlay exec /home/oggei/.local/bin/mpvpause
-bindsym XF86AudioPrev exec /home/oggei/.local/bin/switch-sink && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute $(pactl -f json list sinks | jq '.[] | select(.description|test("^Renoir.*")) .index') toggle && dunstify -r 10003 -t 800 "monitor muted" "\nBRUBRU" && $refresh_i3status
+bindsym XF86AudioPlay exec --no-startup-id /home/oggei/.local/bin/mpvpause
+bindsym XF86AudioPrev exec --no-startup-id /home/oggei/.local/bin/switch-sink && $refresh_i3status
 
 
 # resize window (you can also use the mouse for that)
@@ -161,7 +160,7 @@ bar {
 
 
 ## oggei
-bindsym $mod+l exec /usr/bin/xscreensaver-command -lock
+bindsym $mod+l exec --no-startup-id /usr/bin/xscreensaver-command -lock
 
 #bind Control+Shift+113 iceweasel
 bindsym $mod+q exec --no-startup-id flameshot gui
