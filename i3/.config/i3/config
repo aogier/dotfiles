@@ -120,7 +120,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym Control+XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -1% && $refresh_i3status
 # mute sound
 bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/mute_monitors && $refresh_i3status
-bindsym XF86AudioPlay exec --no-startup-id ~/.local/bin/mpvpause
+bindsym XF86AudioPlay exec --no-startup-id ~/.local/scripts/mpvpause
 bindsym XF86AudioPrev exec --no-startup-id ~/.local/scripts/switch-sink && $refresh_i3status
 
 
