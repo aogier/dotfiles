@@ -164,10 +164,7 @@ bar {
 bindsym $mod+l exec /usr/bin/xscreensaver-command -lock
 
 #bind Control+Shift+113 iceweasel
-bindsym $mod+a exec rdesktop -g 1600x860 192.168.57.61 -u oggei -pmonopoli
-bindsym $mod+w exec rdesktop -g 1600x860 172.16.0.21 -u oggei -pmonopoli
-bindsym $mod+q exec vncviewer toporiccio:1 -passwd .vnc/passwd
-bindsym $mod+x exec shutter --select
+bindsym $mod+q exec --no-startup-id flameshot gui
 
 bindsym $mod+Shift+s sticky toggle
 

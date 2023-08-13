@@ -148,21 +148,6 @@ PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg_bold[white]%}%n@%m %{$fg[cyan]%
 zstyle ':completion:*' special-dirs true
 unsetopt share_history
 
-c() {
-
-    if [[ $1 == /* ]]; then
-        p=$1
-        shift
-    else
-        p=''
-    fi
-
-    curl -sH 'Content-Type: application/json' \
-        http://admin:K7fowAEvA2Yf4ankMKrbz5zT5hxR3UTSidFSob4uK9QHbYwS@couchdb.devops.scimmia.net$p "$@" | jq .
-
-
-}
-
 e() {
 
     if [[ $1 == /* ]]; then
