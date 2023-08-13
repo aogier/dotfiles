@@ -119,9 +119,9 @@ bindsym Control+XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
 bindsym Control+XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -1% && $refresh_i3status
 # mute sound
-bindsym XF86AudioMute exec --no-startup-id /home/oggei/.local/scripts/mute_monitors && $refresh_i3status
-bindsym XF86AudioPlay exec --no-startup-id /home/oggei/.local/bin/mpvpause
-bindsym XF86AudioPrev exec --no-startup-id /home/oggei/.local/scripts/switch-sink && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/mute_monitors && $refresh_i3status
+bindsym XF86AudioPlay exec --no-startup-id ~/.local/bin/mpvpause
+bindsym XF86AudioPrev exec --no-startup-id ~/.local/scripts/switch-sink && $refresh_i3status
 
 
 # resize window (you can also use the mouse for that)
@@ -154,7 +154,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         #position top
-        status_command /home/oggei/.pyenv/shims/py3status # -l /tmp/py3status.log
+        status_command ~/.pyenv/shims/py3status # -l /tmp/py3status.log
         font pango:DejaVu Sans Mono 12
 }
 
