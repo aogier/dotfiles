@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -eu
+
+. "$(dirname "$0")/dunst-registry"
+
+pactl set-sink-mute "$(pactl -f json list sinks | jq '.[] | select(.description|test("^monitors.*")) .index')" toggle
+
+dunstify -r $TOGGLE_MUTE -t 800 "monitor muted" "\nBRUBRU"

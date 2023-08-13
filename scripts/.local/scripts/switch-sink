@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -eu
+
+. "$(dirname "$0")/dunst-registry"
 
 current_sink="$(pactl info | grep 'Default Sink' | cut -d':' -f 2 | xargs)"
 
@@ -8,4 +11,4 @@ new_sink="$(pactl -f json list sinks | jq -r '.[] .name' | grep -v "$current_sin
 pactl set-default-sink "$new_sink"
 
 description="$(pactl -f json list sinks  | jq -r ".[] | select(.name==\"$new_sink\") .description")"
-dunstify -r 10002 -t 800 "audio output" "\noutput is now $description"
+dunstify -r $SWITCH_SINK -t 800 "audio output" "\noutput is now $description"
