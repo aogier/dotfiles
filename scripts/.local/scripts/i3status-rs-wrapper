@@ -1,0 +1,6 @@
+#!/bin/sh
+
+I3RS_GITHUB_TOKEN="$(cat ~/.secrets/github_notifications)"
+export I3RS_GITHUB_TOKEN
+
+i3status-rs

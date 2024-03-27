@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+. "$(dirname "$0")/dunst-registry"
+
+pactl set-sink-volume @DEFAULT_SINK@ $1
+
+pulsemixer --get-volume \
+    | awk '{print $1}' \
+    | xargs \
+        -I % dunstify \
+        -r $SHOW_VOLUME \
+        -h int:value:% \
+        'volume %' \
+        -u low \
+        -t 800

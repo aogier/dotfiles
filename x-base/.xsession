@@ -16,10 +16,12 @@ nm-applet&
 
 keepassxc ~/.local/passwords/*Passwords.kdbx &
 
-birdtray&
+#birdtray&
 
-dropbox start&
+#dropbox start&
 
 flameshot&
+
+xmodmap -e 'keycode 94 = less greater'
 
 exec /usr/bin/i3

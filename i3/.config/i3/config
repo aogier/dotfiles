@@ -108,20 +108,20 @@ bindsym $mod+Shift+R restart
 bindsym $mod+Shift+E exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym Control+grave exec --no-startup-id tdrop -ma -w -4 -y 30% alacritty
-bindsym Control+Escape exec --no-startup-id tdrop -ma -w -4 -y 30% leapp-gui
+#bindsym Control+Escape exec --no-startup-id tdrop -ma -w -4 -y 30% emacs
 
-set $refresh_i3status killall -SIGUSR1 py3status
-
-#increase sound volume
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
-bindsym Control+XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +1% && $refresh_i3status
-#decrease sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
-bindsym Control+XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -1% && $refresh_i3status
+# sound volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/scripts/volume +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.local/scripts/volume -5%
+bindsym Control+XF86AudioRaiseVolume exec --no-startup-id ~/.local/scripts/volume +1%
+bindsym Control+XF86AudioLowerVolume exec --no-startup-id ~/.local/scripts/volume -1%
 # mute sound
-bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/mute_monitors && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id ~/.local/scripts/mute_monitors
 bindsym XF86AudioPlay exec --no-startup-id ~/.local/scripts/mpvpause
-bindsym XF86AudioPrev exec --no-startup-id ~/.local/scripts/switch-sink && $refresh_i3status
+bindsym XF86AudioPrev exec --no-startup-id ~/.local/scripts/switch-sink
+
+bindsym Control+Shift+XF86AudioRaiseVolume exec --no-startup-id flock /tmp/monitor -c '~/.local/scripts/monitor-align.sh down'
+bindsym Control+Shift+XF86AudioLowerVolume exec --no-startup-id flock /tmp/monitor -c '~/.local/scripts/monitor-align.sh up'
 
 
 # resize window (you can also use the mouse for that)
@@ -152,11 +152,20 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
+#bar {
+#        #position top
+#        status_command ~/.pyenv/shims/py3status # -l /tmp/py3status.log
+#        #font pango:DejaVu Sans Mono 12
+#        font pango:JetBrainsMono NF 11.5
+#        tray_output primary
+#}
+
 bar {
-        #position top
-        status_command ~/.pyenv/shims/py3status # -l /tmp/py3status.log
-        font pango:DejaVu Sans Mono 12
+        status_command ~/.local/scripts/i3status-rs-wrapper
+        font pango:JetBrainsMono NF 11.5
+        tray_output DisplayPort-1
 }
+
 
 
 ## oggei
@@ -178,7 +187,7 @@ for_window [class="^Gitk$"] floating enable
 for_window [class="^zoom$"] floating enable
 for_window [class="^Xdot$"] floating enable
 for_window [window_role="^Preferences$" class="^Thunderbird$"] floating enable
-for_window [instance="^xterm|Eclipse$"] border pixel 1
+for_window [instance="^xterm|Eclipse|emacs$"] border pixel 1
 for_window [class="^Firefox|Alacritty|Leapp$"] border pixel 1
 for_window [class="^Eclipse$"] move to workspace 3
 for_window [title="^Eclipse$"] move to workspace 3
@@ -188,8 +197,8 @@ for_window [class="^Yubico Authenticator"] floating enable
 for_window [class="flameshot"] floating enable
 
 
-workspace 1 output DisplayPort-0 DisplayPort-1
-workspace 2 output DisplayPort-0 DisplayPort-1
-workspace 3 output DisplayPort-1 DisplayPort-0
+workspace 1 output DisplayPort-1 DisplayPort-0
+workspace 2 output DisplayPort-1 DisplayPort-0
+workspace 3 output DisplayPort-0 DisplayPort-1
 
 mouse_warping none

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#pactl load-module module-null-sink sink_name=monitors
+pactl load-module module-combine-sink \
+      sink_name=monitors \
+      sinks=alsa_output.pci-0000_05_00.1.pro-output-3
+
+sleep 1
+
+for sink in \
+    alsa_output.pci-0000_05_00.1.pro-output-3:playback_AUX0 \
+    alsa_output.pci-0000_05_00.1.pro-output-3:playback_AUX1 \
+    alsa_output.pci-0000_05_00.1.pro-output-7:playback_AUX0
+do
+    pw-link \
+        output.monitors_alsa_output.pci-0000_05_00.1.pro-output-3:output_FL \
+        $sink
+done
+
+for sink in \
+    alsa_output.pci-0000_05_00.1.pro-output-3:playback_AUX1 \
+    alsa_output.pci-0000_05_00.1.pro-output-7:playback_AUX0 \
+    alsa_output.pci-0000_05_00.1.pro-output-7:playback_AUX1
+do
+    pw-link \
+        output.monitors_alsa_output.pci-0000_05_00.1.pro-output-3:output_FR \
+        $sink
+done

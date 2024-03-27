@@ -5,7 +5,8 @@ general {
     markup = 'pango'
 }
 
-order = 'reddit'
+#order = 'reddit'
+#order = "spotify"
 order = 'github'
 order += 'cpufreq'
 order += 'diskdata'
@@ -87,4 +88,13 @@ do_not_disturb {
     thresholds = [(0, "good"), (1, "bad")]
 	color_good = "#aaffaa"
 	color_bad = "#ffaaaa"
+}
+
+spotify {
+    #button_next = 4
+    button_play_pause = 1
+    #button_previous = 5
+    format = "{title} by {artist} -> {time}"
+    format_down = "no Spotify"
+    dbus_client = "org.mpris.MediaPlayer2.spotifyd.instance2894237"
 }

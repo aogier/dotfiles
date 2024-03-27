@@ -8,8 +8,6 @@ fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-zstyle ':omz:plugins:nvm' lazy yes
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -72,15 +70,10 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-export NVM_LAZY_LOAD=true
-export NVM_COMPLETION=true
 plugins=(
   docker
   evalcache
   git
-  git-flow
-  terraform
-  zsh-nvm
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -117,116 +110,59 @@ source $ZSH/oh-my-zsh.sh
 export DEBEMAIL='alessandro.ogier@gmail.com'
 export DEBFULLNAME='Alessandro -oggei- Ogier'
 
-export vagrant=~/dev/vagrant
-
-inject () {
-        file=$1
-            svn-inject --no-branches --setprops $file https://devel.ieo.eu/svn/public/packages
-}
-
-sbp () {
-        svn-buildpackage \
-                --svn-builder='pdebuild --pbuilder cowbuilder --buildresult /tmp/ -- --basepath /var/cache/pbuilder/wheezy-amd64 ' "$@"
-
-}
-
-p () {
-        pdebuild --pbuilder cowbuilder --buildresult /tmp/ -- --basepath /var/cache/pbuilder/${DIST:-stretch-amd64}/ "$@"
-}
-
-copysrc () {
-        sudo -u incoming reprepro -b /srv/repositories/main/ copysrc wheezy-ieo sid-ieo "$@"
-}
-
-
-export PATH=$HOME/.local/bin:$PATH
-alias ipython='ipython3 --colors=Linux'
-export WORKON_HOME=$HOME/.virtualenvs
+export PATH=$HOME/.local/bin:$HOME/.local/scripts:$PATH
 
 PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg_bold[white]%}%n@%m %{$fg[cyan]%}%~ %{$fg_bold[blue]%}$(git_prompt_info)$(hg_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
 
 zstyle ':completion:*' special-dirs true
 unsetopt share_history
 
-e() {
-
-    if [[ $1 == /* ]]; then
-        p=$1
-        shift
-    else
-        p=''
-    fi
-
-    curl -sH 'Content-Type: application/json' \
-        http://localhost:9200$p "$@" | jq .
-
-}
-
+alias cabbesa='k -n default exec -it deploy/cabbesa -- bash'
+alias cal='ncal -b'
 alias ccc=chachacha
+alias cdktf='npx cdktf'
+alias cdk='npx cdk'
+alias git='git -P'
+alias gitk='gitk&; disown'
+alias ipython='ipython3 --colors=Linux'
+alias k=kubectl
+alias p='poetry run pulumi'
+alias cat='bat -pp'
+alias less='bat -p'
+
+export AWS_PAGER=''
+export AWS_PROFILE=nsp-main
+export DOCKER_BUILDKIT=1
+export GPG_TTY=$(tty)
+export KUBECONFIG="~/.kube/empty.yaml:$(find ~/.kube/clusters -type f|grep -v lock | xargs echo | sed 's/ /:/g')"
+#export PATH="/home/oggei/.pyenv/bin:${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 autoload bashcompinit && bashcompinit
-complete -C aws_completer aws
-
-#source <(helm completion zsh)
 _evalcache helm completion zsh
-
-#alias k='kubectl --insecure-skip-tls-verify'
-alias k='kubectl'
 _evalcache kubectl completion zsh
+_evalcache pulumi gen-completion zsh
+complete -C aws_completer aws
 complete -F __start_kubectl k
-#export KUBECONFIG=~/.kube/lendbox-dev:~/.kube/lendbox-prod:~/.kube/iubenda:~/.kube/k3s:~/.kube/guardian-fra-kubeconfig.yaml:~/.kube/guardian-lon-kubeconfig.yaml:~/.kube/iub-logs-kubeconfig.yaml:~/.kube/k3s.yaml:~/.kube/k0s.yaml
-export KUBECONFIG=~/.kube/empty.yaml
-export KUBECONFIG=$KUBECONFIG:$(find ~/.kube/clusters -type f|grep -v lock | xargs echo | sed 's/ /:/g')
 
-export GPG_TTY=$(tty)
+#### Added by Zinit's installer
+#if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+#    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+#    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+#    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
+#        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+#        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+#fi
+#
+#source "$HOME/.zinit/bin/zinit.zsh"
+#
+#autoload -Uz _zinit
+#(( ${+_comps} )) && _comps[zinit]=_zinit
+#### End of Zinit's installer chunk
 
-### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-
-source "$HOME/.zinit/bin/zinit.zsh"
-#_evalcache $HOME/.zinit/bin/zinit.zsh
-
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-### End of Zinit's installer chunk
-
-#zplugin light jonmosco/kube-ps1
-#PROMPT='$(kube_ps1)'$PROMPT
-#export \
-#	KUBE_PS1_SYMBOL_ENABLE=false
-#	KUBE_PS1_NS_ENABLE=false
-#	KUBE_PS1_PREFIX=
-#	KUBE_PS1_SUFFIX=
-
-
-alias cabbesa='k -n default exec -it deploy/cabbesa -- bash'
-
-
-autoload -Uz compinit
 zstyle ':completion:*' menu select
-fpath+=~/.zfunc
-
-export PATH=$PATH:~/.bin
-
-export PATH="/home/oggei/.pyenv/bin:$PATH"
-#eval "$(pyenv init -)"
-#eval "$(pyenv virtualenv-init -)"
-_evalcache pyenv init -
-_evalcache pyenv virtualenv-init -
-
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}(%{$fg[red]%}"
 
-
-alias gitk='gitk&; disown'
-
-export PATH=$(pyenv root)/shims:$PATH
 
 # https://wiki.archlinux.org/title/zsh#Persistent_rehash
 zshcache_time="$(date +%s%N)"
@@ -245,63 +181,38 @@ rehash_precmd() {
 
 add-zsh-hook -Uz precmd rehash_precmd
 
-alias cal='ncal -b'
-
-
-fpath+=~/.zsh/completion
-
-export DOCKER_BUILDKIT=1
-
-alias git='git -P'
-#compdef cdktf
-###-begin-cdktf-completions-###
-#
-# yargs command completion script
-#
-# Installation: ../../node_modules/.bin/cdktf completion >> ~/.zshrc
-#    or ../../node_modules/.bin/cdktf completion >> ~/.zprofile on OSX.
-#
-_cdktf_yargs_completions()
-{
-  local reply
-  local si=$IFS
-  IFS=$'
-' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" ../../node_modules/.bin/cdktf --get-yargs-completions "${words[@]}"))
-  IFS=$si
-  _describe 'values' reply
-}
-compdef _cdktf_yargs_completions cdktf
-###-end-cdktf-completions-###
-
-alias cdktf="npx cdktf"
-
-#alias vi='() {
-#	xdotool key CTRL+minus CTRL+minus CTRL+minus  2>/dev/null
-#	vim $1
-#	xdotool key ctrl+0
-#}'
-
-alias vim=vi
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-_evalcache gh completion -s zsh
-_evalcache argocd completion zsh
-
 
 acc (){
 	grep -i "$@" ~/dev/waldo/accounts.csv
 }
 
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export GITLAB_PRIVATE_TOKEN=$(cat ~/.local/secrets/gitlab_com_private_token)
 
-export AWS_PAGER=''
-export AWS_SHARED_CREDENTIALS_FILE=~/.aws/credentials.pota
+# add Pulumi to the PATH
 
-export AWS_PROFILE=nsp-main
+vi () {
+
+    _pwd=$PWD
+    exe=/home/oggei/.local/bin/lvim
+
+    while [ $_pwd != / ]
+    do
+        if [ -f poetry.lock ]
+        then
+            poetry run $exe $@
+            return
+        fi
+        _pwd=$(dirname $_pwd)
+    done
+
+    $exe $@
+
+}
+
+eval "$(~/.local/bin/mise activate zsh)"
+
+export PATH="$HOME/.config/emacs/bin:$PATH"
+
+export PATH="$HOME/.npm-global/bin:$PATH"

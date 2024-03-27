@@ -6,4 +6,13 @@ set -eu
 
 pactl set-sink-mute "$(pactl -f json list sinks | jq '.[] | select(.description|test("^monitors.*")) .index')" toggle
 
-dunstify -r $TOGGLE_MUTE -t 800 "monitor muted" "\nBRUBRU"
+if [ $(pactl -f json list sinks | jq '.[] | select(.description|test("^monitors.*")) .mute') = 'true' ]
+then
+    title='🔈'
+    message='muted'
+else
+    title='🔊'
+    message='unmuted'
+fi
+
+dunstify -i display -r $TOGGLE_MUTE -t 800 "$title" $message
