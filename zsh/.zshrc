@@ -129,6 +129,7 @@ alias k=kubectl
 alias p='poetry run pulumi'
 alias cat='bat -pp'
 alias less='bat -p'
+alias vi='emacsclient -c -n'
 
 export AWS_PAGER=''
 export AWS_PROFILE=nsp-main
@@ -192,24 +193,24 @@ export GITLAB_PRIVATE_TOKEN=$(cat ~/.local/secrets/gitlab_com_private_token)
 
 # add Pulumi to the PATH
 
-vi () {
+# vi () {
 
-    _pwd=$PWD
-    exe=/home/oggei/.local/bin/lvim
+#     _pwd=$PWD
+#     exe=/home/oggei/.local/bin/lvim
 
-    while [ $_pwd != / ]
-    do
-        if [ -f poetry.lock ]
-        then
-            poetry run $exe $@
-            return
-        fi
-        _pwd=$(dirname $_pwd)
-    done
+#     while [ $_pwd != / ]
+#     do
+#         if [ -f poetry.lock ]
+#         then
+#             poetry run $exe $@
+#             return
+#         fi
+#         _pwd=$(dirname $_pwd)
+#     done
 
-    $exe $@
+#     $exe $@
 
-}
+# }
 
 eval "$(~/.local/bin/mise activate zsh)"
 
