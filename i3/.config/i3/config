@@ -162,7 +162,7 @@ bindsym $mod+r mode "resize"
 
 bar {
         status_command ~/.local/scripts/i3status-rs-wrapper
-        font pango:JetBrainsMono NF 11.5
+        font pango:JetBrainsMono Nerd Font 11.5
         tray_output DisplayPort-1
 }
 
@@ -190,6 +190,11 @@ for_window [window_role="^Preferences$" class="^Thunderbird$"] floating enable
 for_window [instance="^xterm|Eclipse|emacs$"] border pixel 1
 for_window [class="^Firefox|Alacritty|Leapp$"] border pixel 1
 for_window [class="^Eclipse$"] move to workspace 3
+
+# leonardo
+for_window [class="^Wfica$"] move to workspace 4
+for_window [class="^Wfica$"] border pixel 0
+
 for_window [title="^Eclipse$"] move to workspace 3
 for_window [title="^Eclipse Marketplace"] floating enable
 for_window [class="^Yubico Authenticator"] floating enable
@@ -200,5 +205,6 @@ for_window [class="flameshot"] floating enable
 workspace 1 output DisplayPort-1 DisplayPort-0
 workspace 2 output DisplayPort-1 DisplayPort-0
 workspace 3 output DisplayPort-0 DisplayPort-1
+workspace 4 output DisplayPort-1 DisplayPort-0
 
 mouse_warping none

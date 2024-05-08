@@ -129,7 +129,16 @@ alias k=kubectl
 alias p='poetry run pulumi'
 alias cat='bat -pp'
 alias less='bat -p'
-alias vi='emacsclient -c -n'
+#alias vi='emacsclient -r -n'
+
+vi() {
+	if [ -n "$DISPLAY" ]
+	then
+		emacsclient -r -n "$@"
+	else
+		emacsclient -c "$@"
+	fi
+}
 
 export AWS_PAGER=''
 export AWS_PROFILE=nsp-main
@@ -217,3 +226,9 @@ eval "$(~/.local/bin/mise activate zsh)"
 export PATH="$HOME/.config/emacs/bin:$PATH"
 
 export PATH="$HOME/.npm-global/bin:$PATH"
+
+
+#unalias run-help
+autoload run-help
+HELPDIR=/usr/share/zsh/"${ZSH_VERSION}"/help
+alias help=run-help

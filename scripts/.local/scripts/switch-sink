@@ -6,9 +6,14 @@ set -eu
 
 current_sink="$(pactl info | grep 'Default Sink' | cut -d':' -f 2 | xargs)"
 
-new_sink="$(pactl -f json list sinks | jq -r '.[] .name' | grep -v "$current_sink" | grep -v pro-output | grep -v Jabra)"
+new_sink="$(pactl -f json list sinks \
+                | jq -r '.[] .name' \
+                | grep -v "$current_sink" \
+                | grep -v pro-output \
+                | grep -E '(monitors|bluez|Jabra)')"
 
 pactl set-default-sink "$new_sink"
 
 description="$(pactl -f json list sinks  | jq -r ".[] | select(.name==\"$new_sink\") .description")"
+killall -USR2 i3status-rs
 dunstify -r $SWITCH_SINK -t 800 "audio output" "\noutput is now $description"
