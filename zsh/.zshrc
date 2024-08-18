@@ -144,7 +144,6 @@ export AWS_PAGER=''
 export AWS_PROFILE=nsp-main
 export DOCKER_BUILDKIT=1
 export GPG_TTY=$(tty)
-export KUBECONFIG="~/.kube/empty.yaml:$(find ~/.kube/clusters -type f|grep -v lock | xargs echo | sed 's/ /:/g')"
 #export PATH="/home/oggei/.pyenv/bin:${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 autoload bashcompinit && bashcompinit
@@ -153,6 +152,7 @@ _evalcache kubectl completion zsh
 _evalcache pulumi gen-completion zsh
 complete -C aws_completer aws
 complete -F __start_kubectl k
+_evalcache tkn completion zsh
 
 #### Added by Zinit's installer
 #if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
@@ -222,6 +222,9 @@ export GITLAB_PRIVATE_TOKEN=$(cat ~/.local/secrets/gitlab_com_private_token)
 # }
 
 eval "$(~/.local/bin/mise activate zsh)"
+
+#KUBECONFIG="~/.kube/empty.yaml:$(find ~/.kube/clusters -type f|grep -v lock | xargs echo | sed 's/ /:/g')" \
+#  /home/oggei/.local/share/mise/installs/kubectl/latest/bin/kubectl config view --flatten > ~/.kube/config
 
 export PATH="$HOME/.config/emacs/bin:$PATH"
 

@@ -18,7 +18,7 @@ font pango:Telegrama Render OsN 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec --no-startup-id alacritty
+bindsym $mod+Return exec --no-startup-id alacritty --working-directory `xcwd`
 
 # kill focused window
 bindsym $mod+Shift+Q kill
@@ -186,6 +186,7 @@ for_window [title=".* KeePassXC"] floating enable
 for_window [class="^Gitk$"] floating enable
 for_window [class="^zoom$"] floating enable
 for_window [class="^Xdot$"] floating enable
+for_window [class="^(e|E)macs"] border pixel 1
 for_window [window_role="^Preferences$" class="^Thunderbird$"] floating enable
 for_window [instance="^xterm|Eclipse|emacs$"] border pixel 1
 for_window [class="^Firefox|Alacritty|Leapp$"] border pixel 1
@@ -194,6 +195,7 @@ for_window [class="^Eclipse$"] move to workspace 3
 # leonardo
 for_window [class="^Wfica$"] move to workspace 4
 for_window [class="^Wfica$"] border pixel 0
+for_window [class="^Wfica$"] floating enable
 
 for_window [title="^Eclipse$"] move to workspace 3
 for_window [title="^Eclipse Marketplace"] floating enable

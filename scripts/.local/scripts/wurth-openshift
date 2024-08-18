@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+
+set -eu
+
+PATH="$HOME/.local/bin:$PATH"
+
+CONTEXT=wurth
+export CONTEXT
+
+KUBECONFIG=$(mktemp)
+export KUBECONFIG
+
+chmod 0600 "$KUBECONFIG"
+
+mise exec -- oc login \
+    --server=https://localhost:6443 \
+    --insecure-skip-tls-verify \
+    -u aogier \
+    -p"$(cat ~/.local/secrets/wurth-ldap)" \
+    > /dev/null
+
+# get current namespace
+NAMESPACE=$(mise exec -- yq -r --arg context "$CONTEXT" \
+    '.contexts[] | select(.name==$context) .context.namespace' \
+    ~/.kube/config)
+
+# set context name
+# shellcheck disable=SC2016
+mise exec -- yq -iY \
+    --arg context "$CONTEXT" \
+    '.contexts[0].name=$context' "$KUBECONFIG"
+
+# set context namespace
+# shellcheck disable=SC2016
+mise exec -- yq -iY \
+    --arg namespace "$NAMESPACE" \
+    '.contexts[0].context.namespace=$namespace' "$KUBECONFIG"
+
+mv "$KUBECONFIG" "$HOME/.kube/clusters/$CONTEXT.yaml"

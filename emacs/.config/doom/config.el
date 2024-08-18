@@ -96,11 +96,9 @@
 
 ;; scroll one line at a time (less "jumpy" than defaults)
 
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;;(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+;;(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+;;(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
 ;; (auto-fill-mode 1)
 ;; (setq comment-auto-fill-only-comments t)
@@ -114,3 +112,35 @@
 ;; rust debug
 (require 'dap-lldb)
 (require 'dap-cpptools)
+(require 'dap-python)
+
+
+;; jedi
+(use-package lsp-jedi
+  :ensure t)
+
+
+(require 'py-isort)
+(add-hook 'before-save-hook 'py-isort-before-save)
+
+;;(after! rustic
+;;  (setq rustic-format-on-save t))
+
+;; (map! :map doom-leader-code-map
+;;       "l i" #'lsp-inlay-hints-mode)
+(setq lsp-inlay-hint-enable t)
+(setq lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+(setq lsp-rust-analyzer-display-chaining-hints t)
+(setq lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names t)
+(setq lsp-rust-analyzer-display-closure-return-type-hints t)
+(setq lsp-rust-analyzer-display-parameter-hints t)
+(setq lsp-rust-analyzer-display-reborrow-hints t)
+
+(setq mouse-drag-copy-region t)
+
+(setq company-global-modes '(not yaml-mode))
+
+(use-package! lsp-bridge
+  :config
+  (setq lsp-bridge-enable-log nil)
+  (global-lsp-bridge-mode))

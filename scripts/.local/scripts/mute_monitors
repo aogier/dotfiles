@@ -4,7 +4,12 @@ set -eu
 
 . "$(dirname "$0")/dunst-registry"
 
-pactl set-sink-mute "$(pactl -f json list sinks | jq '.[] | select(.description|test("^monitors.*")) .index')" toggle
+for idx in $(pactl -f json list sinks | jq '.[] | select(.description|test("^(monitors|.*Renoir).*")) .index')
+do
+
+    pactl set-sink-mute "$idx" toggle
+
+done
 
 if [ $(pactl -f json list sinks | jq '.[] | select(.description|test("^monitors.*")) .mute') = 'true' ]
 then
