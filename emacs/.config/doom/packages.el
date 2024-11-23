@@ -11,16 +11,7 @@
 (package! lsp-jedi)
 (package! jinja2-mode)
 (package! cov)
-
-(when (package! lsp-bridge
-        :recipe (:host github
-                 :repo "manateelazycat/lsp-bridge"
-                 :branch "master"
-                 :files ("*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-                 ;; do not perform byte compilation or native compilation for lsp-bridge
-                 :build (:not compile)))
-  (package! markdown-mode)
-  (package! yasnippet))
+(package! polymode)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

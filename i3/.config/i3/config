@@ -108,7 +108,7 @@ bindsym $mod+Shift+R restart
 bindsym $mod+Shift+E exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym Control+grave exec --no-startup-id tdrop -ma -w -4 -y 30% alacritty
-#bindsym Control+Escape exec --no-startup-id tdrop -ma -w -4 -y 30% emacs
+#bindsym Control+Escape exec --no-startup-id tdrop -ma -w -4 -h 100% easyeffects
 
 # sound volume
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.local/scripts/volume +5%

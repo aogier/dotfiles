@@ -130,6 +130,7 @@ alias p='poetry run pulumi'
 alias cat='bat -pp'
 alias less='bat -p'
 #alias vi='emacsclient -r -n'
+#alias vi=nvim
 
 vi() {
 	if [ -n "$DISPLAY" ]
@@ -230,8 +231,28 @@ export PATH="$HOME/.config/emacs/bin:$PATH"
 
 export PATH="$HOME/.npm-global/bin:$PATH"
 
+export PATH="$HOME/go/bin:$PATH"
+
 
 #unalias run-help
 autoload run-help
 HELPDIR=/usr/share/zsh/"${ZSH_VERSION}"/help
 alias help=run-help
+
+export HISTSIZE=250000
+export SAVEHIST=50000
+
+if [ "$SSH_CLIENT" ]; then
+   # I have logged in via SSH
+   export PINENTRY_USER_DATA=USE_CURSES
+fi
+export GPG_TTY=`tty`
+
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+
+. "$HOME/.cargo/env"

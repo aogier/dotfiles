@@ -75,6 +75,8 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(setq lsp-use-plists "true")
+
 (setq confirm-kill-emacs nil)
 
 (after! dockerfile-mode
@@ -120,27 +122,96 @@
   :ensure t)
 
 
+
+;; (setq lsp-inlay-hint-enable t)
+(map!
+ :leader
+ (:prefix-map
+  ("<SPC>" . "custom")
+  (:prefix-map ("c" . "custom code")
+   :desc (format
+          "toggle inlay hints, %s" lsp-inlay-hints-mode ) "l i" #'lsp-inlay-hints-mode)))
+
+
+
 (require 'py-isort)
 (add-hook 'before-save-hook 'py-isort-before-save)
 
-;;(after! rustic
-;;  (setq rustic-format-on-save t))
-
-;; (map! :map doom-leader-code-map
-;;       "l i" #'lsp-inlay-hints-mode)
-(setq lsp-inlay-hint-enable t)
-(setq lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
-(setq lsp-rust-analyzer-display-chaining-hints t)
-(setq lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names t)
-(setq lsp-rust-analyzer-display-closure-return-type-hints t)
-(setq lsp-rust-analyzer-display-parameter-hints t)
-(setq lsp-rust-analyzer-display-reborrow-hints t)
+(after! rustic
+  (setq rustic-format-on-save t)
+  (setq lsp-rust-analyzer-cargo-watch-command "clippy")
+  (setq lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (setq lsp-rust-analyzer-display-chaining-hints t)
+  (setq lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names t)
+  (setq lsp-rust-analyzer-display-closure-return-type-hints t)
+  (setq lsp-rust-analyzer-display-parameter-hints t)
+  (setq lsp-rust-analyzer-display-reborrow-hints t))
 
 (setq mouse-drag-copy-region t)
 
 (setq company-global-modes '(not yaml-mode))
 
-(use-package! lsp-bridge
+
+
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+            (setcar orig-result command-from-exec-path))
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+
+
+
+(use-package! polymode
   :config
-  (setq lsp-bridge-enable-log nil)
-  (global-lsp-bridge-mode))
+  (define-hostmode poly-yaml-hostmode
+    :mode 'yaml-mode)
+
+
+  (define-innermode poly-yaml-python-innermode
+    :mode 'python-mode
+    :head-matcher "# *python"
+    :tail-matcher "# */python"
+    :head-mode 'host
+    :tail-mode 'host)
+
+  (define-innermode poly-yaml-shell-innermode
+    :mode 'sh-mode
+    :head-matcher "# *sh"
+    :tail-matcher "# */sh"
+    :head-mode 'host
+    :tail-mode 'host)
+
+  (define-polymode poly-yamlpy-mode
+    :hostmode 'poly-yaml-hostmode
+    :innermodes '(poly-yaml-python-innermode
+                  poly-yaml-shell-innermode))
+
+  (add-to-list 'auto-mode-alist '("\\.yaml" . poly-yamlpy-mode))
+  (add-to-list 'auto-mode-alist '("\\.yml" . poly-yamlpy-mode))
+
+  )
