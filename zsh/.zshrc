@@ -199,7 +199,6 @@ acc (){
 	grep -i "$@" ~/dev/waldo/accounts.csv
 }
 
-export GITLAB_PRIVATE_TOKEN=$(cat ~/.local/secrets/gitlab_com_private_token)
 
 # add Pulumi to the PATH
 
@@ -256,3 +255,7 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
 
 . "$HOME/.cargo/env"
+if [ -f ~/.zshrc.local ]
+then
+    . ~/.zshrc.local
+fi
