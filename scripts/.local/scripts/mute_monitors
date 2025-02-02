@@ -4,14 +4,9 @@ set -eu
 
 . "$(dirname "$0")/dunst-registry"
 
-for idx in $(pactl -f json list sinks | jq '.[] | select(.description|test("^(monitors|.*Renoir).*")) .index')
-do
+pactl set-sink-mute @DEFAULT_SINK@ toggle
 
-    pactl set-sink-mute "$idx" toggle
-
-done
-
-if [ $(pactl -f json list sinks | jq '.[] | select(.description|test("^monitors.*")) .mute') = 'true' ]
+if [ "$(pactl -f json list sinks | jq '.[] | select(.state=="RUNNING") .mute')" = true ]
 then
     title='🔈'
     message='muted'

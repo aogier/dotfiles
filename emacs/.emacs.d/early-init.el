@@ -1,1 +1,1 @@
-(setenv "LSP_USE_PLISTS" "true")
+/home/oggei/dev/emacs/early-init.el

@@ -131,6 +131,8 @@ alias cat='bat -pp'
 alias less='bat -p'
 #alias vi='emacsclient -r -n'
 #alias vi=nvim
+alias y='less -l yaml'
+alias uns='yq -Y .data | while read key value; do echo $key $(echo $value | base64 -d); done'
 
 vi() {
 	if [ -n "$DISPLAY" ]

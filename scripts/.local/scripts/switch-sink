@@ -1,16 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
 . "$(dirname "$0")/dunst-registry"
 
-current_sink="$(pactl info | grep 'Default Sink' | cut -d':' -f 2 | xargs)"
-
+current_sink=$(pactl get-default-sink)
 new_sink="$(pactl -f json list sinks \
-                | jq -r '.[] .name' \
-                | grep -v "$current_sink" \
-                | grep -v pro-output \
-                | grep -E '(monitors|bluez|Jabra)')"
+		  | jq -r '.[] | "\(.state) \(.name)"' \
+		  | { a="$(</dev/stdin)";  echo "$a"; echo "$a"; } \
+		  | grep -A1 "$current_sink" --no-group-separator \
+		  | grep -v "$current_sink" \
+		  | uniq \
+		  | awk '{print $2}')"
 
 pactl set-default-sink "$new_sink"
 
