@@ -1,0 +1,12 @@
+#!/bin/bash
+
+. ~/dev/openstack/$1-$2-openrc.sh > /dev/null
+
+OS_PASSWORD=$(/bin/cat ~/.local/secrets/openstack-$1)
+export OS_PASSWORD
+
+shift 2
+
+http_proxy= https_proxy= \
+REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \
+~/.local/bin/openstack $@
